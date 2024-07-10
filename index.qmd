@@ -2,10 +2,12 @@
 title: "Green-Hospital"
 ---
 
-This is a Quarto website.
+# The Green Barriers Project at the Children's Hospital
 
-To learn more about Quarto websites visit <https://quarto.org/docs/websites>.
+This is a project dedicated to improving the air quality at The Sheffield Children's Hospital using green barriers. We are funded by UKRI and The Urban Flows Observatory.
 
-```{r}
-1 + 1
-```
+# What is Air Quality?
+
+# What are Green Barriers?
+
+# Air Inequality in Sheffield
