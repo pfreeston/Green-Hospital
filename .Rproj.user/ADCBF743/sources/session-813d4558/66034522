@@ -1,14 +1,14 @@
 {
-    "id": "93F1C2CC",
-    "path": "~/Desktop/Uni/NERC/Green-Hospital/index.qmd",
-    "project_path": "index.qmd",
+    "id": "66034522",
+    "path": "~/Desktop/Uni/NERC/NERC_proj/green_barrier_project.qmd",
+    "project_path": null,
     "type": "quarto_markdown",
     "hash": "0",
     "contents": "",
-    "dirty": true,
-    "created": 1720606577382.0,
+    "dirty": false,
+    "created": 1720610852860.0,
     "source_on_save": false,
-    "relative_order": 1,
+    "relative_order": 3,
     "properties": {
         "rmdVisualMode": "true",
         "rmdVisualWrapConfigured": "true",
@@ -16,16 +16,14 @@
         "Source": "Source",
         "docOutlineVisible": "1",
         "rmdVisualCollapsedChunks": "",
-        "rmdVisualModeLocation": "338:0",
-        "cursorPosition": "12,0",
-        "scrollLine": "0"
+        "rmdVisualModeLocation": "2:778"
     },
     "folds": "",
-    "lastKnownWriteTime": 1720607030,
+    "lastKnownWriteTime": 1720605686,
     "encoding": "UTF-8",
     "collab_server": "",
     "source_window": "",
-    "last_content_update": 1720611695114,
+    "last_content_update": 1720605686,
     "read_only": false,
     "read_only_alternatives": []
 }

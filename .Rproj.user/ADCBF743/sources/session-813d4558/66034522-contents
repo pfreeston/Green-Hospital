@@ -1,0 +1,429 @@
+---
+title: "Green Barrier Project"
+author: "Phoebe Freeston"
+format: pdf
+editor: visual
+---
+
+# Traffic Flow
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+# packages
+
+library(dplyr)
+library(readr)
+library(here)
+library(janitor)
+library(units)
+library(stringr)
+library(tidyverse)
+library(tinytex)
+
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+# data things
+
+traffic_flow <- 
+  "time/s, sensor, cars/min,
+1719813602,[SCC]1FGD1,4.0
+1719813901,[SCC]1FGD1,8.8
+1719814201,[SCC]1FGD1,6.4
+1719814501,[SCC]1FGD1,8.0
+1719814802,[SCC]1FGD1,4.8
+1719815101,[SCC]1FGD1,8.0
+1719815401,[SCC]1FGD1,8.0
+1719815701,[SCC]1FGD1,8.8
+1719816001,[SCC]1FGD1,7.2
+1719816301,[SCC]1FGD1,9.6
+1719816601,[SCC]1FGD1,8.0
+1719816901,[SCC]1FGD1,9.6
+1719817202,[SCC]1FGD1,5.6
+1719817501,[SCC]1FGD1,7.2
+1719817801,[SCC]1FGD1,10.4
+1719818101,[SCC]1FGD1,6.4
+1719818402,[SCC]1FGD1,8.0
+1719818702,[SCC]1FGD1,8.0
+1719819001,[SCC]1FGD1,6.4
+1719819302,[SCC]1FGD1,8.8
+1719819603,[SCC]1FGD1,8.0
+1719819902,[SCC]1FGD1,9.6
+1719820202,[SCC]1FGD1,8.0
+1719820502,[SCC]1FGD1,9.6
+1719820802,[SCC]1FGD1,8.0
+1719821103,[SCC]1FGD1,7.2
+1719821402,[SCC]1FGD1,4.8
+1719821701,[SCC]1FGD1,7.2
+1719822001,[SCC]1FGD1,8.0
+1719822302,[SCC]1FGD1,6.4
+1719822601,[SCC]1FGD1,8.8
+1719823201,[SCC]1FGD1,6.4
+1719823501,[SCC]1FGD1,9.6
+1719823801,[SCC]1FGD1,6.4
+1719824101,[SCC]1FGD1,5.6
+1719824402,[SCC]1FGD1,7.2
+1719824701,[SCC]1FGD1,6.4
+1719825001,[SCC]1FGD1,4.8
+1719825301,[SCC]1FGD1,7.2
+1719825601,[SCC]1FGD1,8.0
+1719825901,[SCC]1FGD1,5.6
+1719826201,[SCC]1FGD1,7.2
+1719826501,[SCC]1FGD1,8.0
+1719826801,[SCC]1FGD1,4.8
+1719827101,[SCC]1FGD1,6.4
+1719827401,[SCC]1FGD1,8.0
+1719827701,[SCC]1FGD1,7.2
+1719828002,[SCC]1FGD1,8.0
+1719828301,[SCC]1FGD1,5.6
+1719828601,[SCC]1FGD1,6.4
+1719828901,[SCC]1FGD1,4.8
+1719829201,[SCC]1FGD1,6.4
+1719829501,[SCC]1FGD1,6.4
+1719829801,[SCC]1FGD1,5.6
+1719830101,[SCC]1FGD1,5.6
+1719830401,[SCC]1FGD1,6.4
+1719830701,[SCC]1FGD1,4.8
+1719831001,[SCC]1FGD1,4.8
+1719831301,[SCC]1FGD1,7.2
+1719831603,[SCC]1FGD1,6.4
+1719831901,[SCC]1FGD1,6.4
+1719832201,[SCC]1FGD1,6.4
+1719832501,[SCC]1FGD1,6.4
+1719832801,[SCC]1FGD1,7.2
+1719833101,[SCC]1FGD1,6.4
+1719833401,[SCC]1FGD1,4.8
+1719833701,[SCC]1FGD1,5.6
+1719834001,[SCC]1FGD1,8.0
+1719834301,[SCC]1FGD1,7.2
+1719834601,[SCC]1FGD1,8.0
+1719834901,[SCC]1FGD1,6.4
+1719835202,[SCC]1FGD1,7.2
+1719835501,[SCC]1FGD1,8.8
+1719835801,[SCC]1FGD1,7.2
+1719836101,[SCC]1FGD1,8.8
+1719836401,[SCC]1FGD1,7.2
+1719836702,[SCC]1FGD1,10.4
+1719837002,[SCC]1FGD1,5.6
+1719837302,[SCC]1FGD1,10.4
+1719837601,[SCC]1FGD1,8.0
+1719837901,[SCC]1FGD1,8.8
+1719838201,[SCC]1FGD1,6.4
+1719838501,[SCC]1FGD1,7.2
+1719838802,[SCC]1FGD1,6.4
+1719839101,[SCC]1FGD1,8.0
+1719839401,[SCC]1FGD1,8.0
+1719839701,[SCC]1FGD1,8.0
+1719840001,[SCC]1FGD1,8.8
+1719840301,[SCC]1FGD1,5.6
+1719840601,[SCC]1FGD1,8.0
+1719840901,[SCC]1FGD1,8.0
+1719841201,[SCC]1FGD1,7.2
+1719841501,[SCC]1FGD1,4.0
+1719841801,[SCC]1FGD1,8.8
+1719842101,[SCC]1FGD1,4.8
+1719842402,[SCC]1FGD1,8.0
+1719842701,[SCC]1FGD1,6.4
+1719843001,[SCC]1FGD1,7.2
+1719843302,[SCC]1FGD1,7.2
+1719843601,[SCC]1FGD1,8.0
+1719843901,[SCC]1FGD1,4.8
+1719844202,[SCC]1FGD1,7.2
+1719844502,[SCC]1FGD1,8.8
+1719844801,[SCC]1FGD1,5.6
+1719845101,[SCC]1FGD1,6.4
+1719845401,[SCC]1FGD1,8.8
+1719845701,[SCC]1FGD1,6.4
+1719846002,[SCC]1FGD1,4.8
+1719846301,[SCC]1FGD1,8.8
+1719846601,[SCC]1FGD1,7.2
+1719846902,[SCC]1FGD1,4.8
+1719847201,[SCC]1FGD1,7.2
+1719847501,[SCC]1FGD1,8.8
+1719847801,[SCC]1FGD1,7.2
+1719848101,[SCC]1FGD1,6.4
+1719848401,[SCC]1FGD1,7.2
+1719848701,[SCC]1FGD1,7.2
+1719849001,[SCC]1FGD1,7.2
+1719849301,[SCC]1FGD1,6.4
+1719849602,[SCC]1FGD1,7.2
+1719849901,[SCC]1FGD1,8.0
+1719850201,[SCC]1FGD1,6.4
+1719850501,[SCC]1FGD1,6.4
+1719850801,[SCC]1FGD1,6.4
+1719851101,[SCC]1FGD1,7.2
+1719851401,[SCC]1FGD1,9.6
+1719851701,[SCC]1FGD1,9.6
+1719852001,[SCC]1FGD1,6.4
+1719852301,[SCC]1FGD1,8.8
+1719852601,[SCC]1FGD1,5.6
+1719852901,[SCC]1FGD1,5.6
+1719853203,[SCC]1FGD1,5.6
+1719853501,[SCC]1FGD1,4.0
+1719853801,[SCC]1FGD1,8.0
+1719854101,[SCC]1FGD1,5.6
+1719854401,[SCC]1FGD1,6.4
+1719854701,[SCC]1FGD1,7.2
+1719855001,[SCC]1FGD1,6.4
+1719855301,[SCC]1FGD1,5.6
+1719855601,[SCC]1FGD1,8.0
+1719855901,[SCC]1FGD1,7.2
+1719856201,[SCC]1FGD1,6.4
+1719856501,[SCC]1FGD1,6.4
+1719856802,[SCC]1FGD1,5.6
+1719857101,[SCC]1FGD1,4.8
+1719857401,[SCC]1FGD1,5.6
+1719857701,[SCC]1FGD1,3.2
+1719858001,[SCC]1FGD1,4.0
+1719858301,[SCC]1FGD1,4.8
+1719858601,[SCC]1FGD1,5.6
+1719858901,[SCC]1FGD1,4.8
+1719859201,[SCC]1FGD1,5.6
+1719859501,[SCC]1FGD1,5.6
+1719859801,[SCC]1FGD1,4.8
+1719860101,[SCC]1FGD1,2.4
+1719860402,[SCC]1FGD1,3.2
+1719860701,[SCC]1FGD1,5.6
+1719861001,[SCC]1FGD1,3.2
+1719861301,[SCC]1FGD1,3.2
+1719861601,[SCC]1FGD1,4.0
+1719861901,[SCC]1FGD1,4.8
+1719862201,[SCC]1FGD1,2.4
+1719862501,[SCC]1FGD1,3.2
+1719862801,[SCC]1FGD1,2.4
+1719863101,[SCC]1FGD1,4.0
+1719863401,[SCC]1FGD1,4.0
+1719863701,[SCC]1FGD1,3.2
+1719864001,[SCC]1FGD1,2.4
+1719864301,[SCC]1FGD1,1.6
+1719864601,[SCC]1FGD1,3.2
+1719864901,[SCC]1FGD1,4.0
+1719865201,[SCC]1FGD1,2.4
+1719865501,[SCC]1FGD1,1.6
+1719865801,[SCC]1FGD1,3.2
+1719866101,[SCC]1FGD1,2.4
+1719866401,[SCC]1FGD1,3.2
+1719866701,[SCC]1FGD1,3.2
+1719867001,[SCC]1FGD1,1.6
+1719867301,[SCC]1FGD1,0.8
+1719867602,[SCC]1FGD1,1.6
+1719867901,[SCC]1FGD1,3.2
+1719868201,[SCC]1FGD1,4.0
+1719868501,[SCC]1FGD1,3.2
+1719868801,[SCC]1FGD1,1.6
+1719869101,[SCC]1FGD1,1.6
+1719869401,[SCC]1FGD1,1.6
+1719869701,[SCC]1FGD1,0.8
+1719870001,[SCC]1FGD1,1.6
+1719870301,[SCC]1FGD1,0.8
+1719870601,[SCC]1FGD1,1.6
+1719870901,[SCC]1FGD1,1.6"
+
+
+ 
+```
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+traffic_flow_clean <- read_csv(I(traffic_flow)) %>% 
+  clean_names() %>% 
+  select(where(~ any(!is.na(.)))) %>% 
+  select(-sensor) 
+
+time <- as.POSIXct(traffic_flow_clean$time_s, origin = "1970-01-01")   
+          
+time <- as_tibble_col(time, c = "time")
+
+traffic_flow_time <- bind_cols(time, traffic_flow_clean)
+
+
+```
+
+## Data from the Urban Flows Observatory, Sheffield
+
+```{r echo = FALSE, warning = FALSE, message = FALSE, label = fig-trafficflow, fig.cap = "Traffic flow from Monday 1st July, 7am - 11pm."}
+
+ggplot(traffic_flow_time, aes(time, cars_min)) + 
+  geom_point() + 
+  geom_smooth() + 
+  labs(x = "Time", y = "Cars through a sensor in one min")
+```
+
+# NO2 Data From Diffusion Tubes
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+# data cleaning
+
+diffusion_tubes <- read_csv(here("raw_data/diffusion-tube-annual-results-2003-2022.csv")) %>% 
+  select(where(~ any(!is.na(.))))
+```
+
+## Data from Sheffield City Council diffusion tubes from 2003 to 2022
+
+```{r echo = FALSE, warning = FALSE, message = FALSE, label = fig-diffusiontubes, fig.cap = "Diffusion tube NO2 readings with WHO AQG shown in red."}
+
+ggplot(diffusion_tubes, aes(year, no2)) +
+  geom_line() +
+  labs(
+    title = "Yearly NO2 emissions at the Children's Hospital (DT)",
+    y = "NO2 ug/m3",
+    x = "Year",
+    legend = " ") +
+  geom_hline(yintercept = 10, colour = "red", linetype = "dashed")
+```
+
+# NO2 data from DEFRA
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+library(dplyr)
+library(readr)
+library(here)
+library(janitor)
+library(units)
+library(stringr)
+library(tidyverse)
+library(ggplot2)
+library(data.table)
+
+# nox as no2
+
+nox_as_no2 <- read_csv(here("raw_data/SHDG_NOXasNO2_2023.csv")) %>% 
+  clean_names() %>% 
+  mutate(across(everything(), tolower)) %>% 
+  mutate(across(everything(), ~ str_replace_all(., " ", "_")))
+
+nox_as_no2_by_date <- pivot_longer(nox_as_no2,
+                                   cols = x01_00:x24_00,
+                                   names_to = "time",
+                                   values_to = "nox_as_n02",
+                                   names_repair = "minimal") 
+
+# create posixct column with seconds since 1970 for 1/1/23
+
+library(lubridate)
+
+new_year <- 1672534800
+
+hour_converter <- 1672538400 - new_year
+
+jan2023 <- as.numeric(ymd_hms("2023-01-01 01:00:00"))
+dec2023 <- as.numeric(ymd_hms("2023-12-31 24:00:00"))
+
+timestamps <- seq(from = jan2023, to = dec2023, by = hour_converter) %>% 
+              as.POSIXct(origin = "1970-01-01")   
+
+nox_no2_clean <- nox_as_no2_by_date %>% 
+  select(-"time"/ "date") %>% 
+  add_column(timestamps)
+
+
+# no2
+
+no2 <- read_csv(here("raw_data/SHDG_NO2_2023.csv")) %>% 
+  clean_names() %>% 
+  mutate(across(everything(), tolower)) %>% 
+  mutate(across(everything(), ~ str_replace_all(., " ", "_")))
+
+no2_by_date <- pivot_longer(no2,
+                             cols = x01_00:x24_00,
+                             names_to = "time",
+                             values_to = "no2",
+                             names_repair = "minimal") 
+
+no2_clean <- no2_by_date %>% 
+  select(-"time"/ "date") %>% 
+  add_column(timestamps)
+
+write_csv(nox_no2_clean, here("data/def_nox_as_no2_2023.csv"))
+write_csv(no2_clean, here("data/def_no2_clean.csv"))
+
+all_no2 <- full_join(nox_no2_clean, no2_clean, by = "timestamps") %>% 
+            select(timestamps, nox_as_n02, no2) 
+
+all_no2$nox_as_no2 <- as.numeric(all_no2$nox_as_n02)
+all_no2$no2 <- as.numeric(all_no2$no2)
+       
+
+# monthly summaries
+  
+month <- format(all_no2$timestamps, "%m")  
+
+all_no2 <- add_column(all_no2, month)
+
+monthly_means <- all_no2 %>%
+  group_by(month) %>%
+  summarize(
+    mean_nox_as_no2 = mean(nox_as_no2, na.rm = TRUE),
+    mean_no2 = mean(no2, na.rm = TRUE)
+  )
+```
+
+```{r echo = FALSE, message = FALSE, WARNING = FALSE, label = fig-no2defra, fig.cap = "NO2 data from DEFRA for 2023"}
+ggplot() +
+  geom_point(data = monthly_means, aes(month, mean_nox_as_no2, colour = "NO2 from NOX")) +
+  geom_point(data = monthly_means, aes(month, mean_no2, colour = "NO2")) +
+  geom_smooth() +
+  labs(
+    title = "Defra data for 2023",
+    x = "Month",
+    y = "Mean NO2 (ug/m3)",
+    legend = " ")
+```
+
+# NO2 data after sensor fix
+
+```{r echo = FALSE, message = FALSE, warning = FALSE}
+
+sensor_1954150 <- read_csv(here("raw_data/telemetry-1954150_20240708093706.csv")) %>% 
+  clean_names() %>% 
+  select(-c(no2_scaled_validity: no2_offset)) %>% 
+  rename(sensor_1954150no2 = no2_scaled_reading)
+
+posixct_time <- as.POSIXct(sensor_1954150$timestamp, tz = "GB",
+                           format("%d/%m/%Y %H:%M")) %>% 
+                as_tibble_col(c = "posixct_timestamp") 
+
+sensor_1954150 <- bind_cols(posixct_time, sensor_1954150)
+
+sensor_1954150 <- select(sensor_1954150, -timestamp) 
+
+start_time <- as.POSIXct("2024-07-05 13:30:00", format = "%Y-%m-%d %H:%M:%S")
+end_time <- as.POSIXct("2024-07-08 07:45:00", format = "%Y-%m-%d %H:%M:%S")
+
+sensor_1954150_filtered <- sensor_1954150 %>% 
+  filter(posixct_timestamp >= start_time & posixct_timestamp <= end_time)
+
+# sensor 1999150
+
+sensor_1999150 <- read_csv(here("raw_data/telemetry-1999150_20240708093707.csv")) %>% 
+  clean_names() %>% 
+  select(-c(no2_scaled_validity: no2_offset)) %>% 
+  rename(sensor_1999150no2 = no2_scaled_reading)
+
+posixct_time_1999150 <- as.POSIXct(sensor_1999150$timestamp, tz = "GB",
+                           format("%d/%m/%Y %H:%M")) %>% 
+as_tibble_col(c = "posixct_timestamp")
+
+sensor_1999150 <- bind_cols(posixct_time_1999150, sensor_1999150) 
+
+sensor_1999150 <- select(sensor_1999150, -timestamp) 
+
+sensor_1999150_filtered <- sensor_1999150 %>% 
+  filter(posixct_timestamp >= start_time & posixct_timestamp <= end_time)
+
+all_sensors <- full_join(sensor_1954150_filtered, sensor_1999150_filtered, by = "posixct_timestamp")
+```
+
+```{r echo = FALSE, message = FALSE, WARNING = FALSE, label = fig-no2afterfix, fig.cap = "NO2 after sensor fix - 5/7 - 8/7"}
+ggplot() +
+  geom_line(data = all_sensors, aes(x = posixct_timestamp, y = sensor_1954150no2, colour = "Sensor 1954150")) +
+  geom_line(data = all_sensors, aes(x = posixct_timestamp, y = sensor_1999150no2, colour = "Sensor 1999150")) + 
+  labs(
+    title = "NO2 emissions 5/7 to 8/7",
+    x = "Timestamp",
+    y = "NO2 ug/m3",
+    colour = " ")
+```
