@@ -8,6 +8,10 @@ This is a project dedicated to improving the air quality at The Sheffield Childr
 
 # What is Air Quality?
 
+Air quality describes the amount of pollutants in the air that we breathe, and it is directly linked to poor health. One pollutant in particular is nitrogen dioxide (NO^2^), a gaseous pollutant emitted from cars. The Sheffield Children's hospital is an area with heavy traffic flow, and therefore NO^2^ levels substantially exceed the Air Quality Guidelines (AQG) of the World Health Organisation (WHO).
+
 # What are Green Barriers?
+
+Vegetation implemented as part of a city's infrastructure is termed a 'Green Barrier'. Studies have shown that green barriers can improve air quality by physically and biologically filtering pollutants.
 
 # Air Inequality in Sheffield
