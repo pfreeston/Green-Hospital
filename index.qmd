@@ -14,4 +14,12 @@ Air quality describes the amount of pollutants in the air that we breathe, and i
 
 Vegetation implemented as part of a city's infrastructure is termed a 'Green Barrier'. Studies have shown that green barriers can improve air quality by physically and biologically filtering pollutants.
 
-# Air Inequality in Sheffield
+# Our Project
+
+We have implemented green barriers in a garden adjacent to the A57 at the Children's Hospital, and are using low-cost air sensors by AQ Mesh to determine whether they improve the air quality.
+
+![Our barriers💚](images/IMG_1706.jpeg){fig-align="center"}
+
+# Results
+
+incoming...
